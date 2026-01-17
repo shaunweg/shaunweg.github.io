@@ -249,6 +249,7 @@ let timeLeft = TIME_LIMIT;
 let timeElapsed = 0;
 let total_errors = 0;
 let errors = 0;
+let errors2 = 0;
 let accuracy = 0;
 let characterTyped = 0;
 let current_quote = "";
@@ -297,6 +298,7 @@ function processCurrentText() {
   characterTyped++;
 
   errors = 0;
+  errors2 = 0;
 
   quoteSpanArray = quote_text.querySelectorAll('span');
   quoteSpanArray.forEach((char, index) => {
@@ -310,6 +312,7 @@ if (char.innerText == '␣') {
       } else{
         char.classList.add('incorrect_char');
         char.classList.remove('correct_char');
+        errors2++;
       }
       
       // incorrect characters
@@ -320,9 +323,12 @@ if (char.innerText == '␣') {
     if (event.key === 'Enter') {
         char.classList.add('correct_char');
         char.classList.remove('incorrect_char');
+    console.log('Enter key pressed!');
       } else{
         char.classList.add('incorrect_char');
         char.classList.remove('correct_char');
+    console.log('Enter key NOT pressed!');
+        errors++;
       }
 })
 
@@ -362,6 +368,8 @@ if (char.innerText == '␣') {
 
     // update total errors
     total_errors += errors;
+    total_errors += errors2;
+    error_text.textContent = total_errors
 
     // clear the input area
     input_area.value = "";
