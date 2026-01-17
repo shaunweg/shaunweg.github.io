@@ -239,6 +239,11 @@ let quote_text = document.querySelector("#quote");
 let quote_text2 = document.querySelector("#quote2");
 let quote_text3 = document.querySelector("#quote3");
 let input_area = document.querySelector(".input_area");
+
+input_area.addEventListener('paste', function(e) {
+    e.preventDefault();
+});
+  
 let restart_btn = document.querySelector(".restart_btn");
 let cpm_group = document.querySelector(".cpm");
 let wpm_group = document.querySelector(".wpm");
@@ -289,9 +294,19 @@ function updateQuote() {
 }
 
 function processCurrentText() {
+  
+  
 
   // get current input text and split it
-  curr_input = input_area.value;
+let curr_input = input_area.value;  // use 'let' so we can reassign if needed
+
+// Check if multiple characters were added at once (possible paste or drag-drop)
+if (curr_input.length - characterTyped > 1) {
+    input_area.value = curr_input.substring(0, characterTyped); // remove extra characters
+    alert('Please type each character manually. Pasting is not allowed.');
+    return; // skip the rest of the processing
+}
+  
   curr_input_array = curr_input.split('');
 
   // increment total characters typed
@@ -500,8 +515,8 @@ function resetValues() {
     }
 });
 
-// Optional: disable right-click context menu
 document.addEventListener('contextmenu', e => e.preventDefault());
 
 
+  
 </script>
