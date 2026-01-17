@@ -179,7 +179,7 @@ a:active {
 <script>
 // define the time limit
 let TIME_LIMIT = 180;
-
+var going = false;
 let activityName = "Benchmark";
 
 heading.innerHTML = activityName;
@@ -201,7 +201,7 @@ let quotes_array = [
   '␣␣␣␣␣␣␣␣fill("#fff");↵',
   "␣␣␣␣␣␣␣␣ellipse(50, 50, 80, 80);↵",
   "␣␣␣␣␣␣}↵",
-  "␣␣␣␣<$script>↵",
+  "␣␣␣␣</scr" + "ipt>↵",
   "␣␣</body>↵",
   "</html>↵",
 
@@ -305,31 +305,37 @@ function processCurrentText() {
     let typedChar = curr_input_array[index]
 
     // characters not currently typed
-if (char.innerText == '␣') {
-      if (typedChar == ' ') {
-        char.classList.add('correct_char');
-        char.classList.remove('incorrect_char');
-      } else{
-        char.classList.add('incorrect_char');
-        char.classList.remove('correct_char');
-        errors2++;
-      }
-      
-      // incorrect characters
-    }
-    else if (char.innerText == '↵') {
+if (char.innerText === '␣') {
+  if (typedChar === ' ') {
+    char.classList.add('correct_char');
+    char.classList.remove('incorrect_char');
+  } 
+  else if (typedChar == null) {
+    char.classList.remove('correct_char');
+    char.classList.remove('incorrect_char');
+  } 
+  else {
+    char.classList.add('incorrect_char');
+    char.classList.remove('correct_char');
+    errors++;
+  }
+}
 
-    input_area.addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-        char.classList.add('correct_char');
-        char.classList.remove('incorrect_char');
-      } else{
-        char.classList.add('incorrect_char');
-        char.classList.remove('correct_char');
-        errors2++;
-      }
-})
-
+// enter symbol
+else if (char.innerText === '↵') {
+  if (typedChar === '\n') {
+    char.classList.add('correct_char');
+    char.classList.remove('incorrect_char');
+  } 
+  else if (typedChar == null) {
+    char.classList.remove('correct_char');
+    char.classList.remove('incorrect_char');
+  } 
+  else {
+    char.classList.add('incorrect_char');
+    char.classList.remove('correct_char');
+    errors++;
+  }
 }
     
     else if (typedChar == null) {
@@ -453,16 +459,19 @@ function finishGame() {
 
 
 function startGame() {
-
+  if (going == false){
   resetValues();
   updateQuote();
 
   // clear old and start a new timer
   clearInterval(timer);
   timer = setInterval(updateTimer, 1000);
+  going = true
+  }
 }
 
 function resetValues() {
+  going = false
   timeLeft = TIME_LIMIT;
   timeElapsed = 0;
   errors = 0;
@@ -482,6 +491,17 @@ function resetValues() {
   wpm_group.style.display = "none";
 }
 
+  document.addEventListener('keydown', function(e) {
+    // e.metaKey is the Command key on Mac
+    // e.ctrlKey is the Control key on Windows/Linux
+    if ((e.ctrlKey || e.metaKey) && 
+        (e.key === 'c' || e.key === 'v' || e.key === 'x')) {
+        e.preventDefault();
+    }
+});
+
+// Optional: disable right-click context menu
+document.addEventListener('contextmenu', e => e.preventDefault());
 
 
 </script>
