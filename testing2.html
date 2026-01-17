@@ -323,12 +323,10 @@ if (char.innerText == '␣') {
     if (event.key === 'Enter') {
         char.classList.add('correct_char');
         char.classList.remove('incorrect_char');
-    console.log('Enter key pressed!');
       } else{
         char.classList.add('incorrect_char');
         char.classList.remove('correct_char');
-    console.log('Enter key NOT pressed!');
-        errors++;
+        errors2++;
       }
 })
 
